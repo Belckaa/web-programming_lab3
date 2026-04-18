@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна робота №3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 550px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #007bff;
+            padding-left: 8px;
+            border-left: 3px solid #007bff;
+        }
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .task-link {
+            display: block;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border-left: 3px solid #007bff;
+        }
+        .task-link:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        .task-number {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .task-desc {
+            font-size: 11px;
+            color: #888;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Лабораторна робота №3</h1>
+        <div class="subtitle">JavaScript. Функції. Дата та час. Регулярні вирази</div>
+
+        <div class="section">
+            <div class="section-title">Завдання 1. Функції</div>
+            <div class="task-list">
+                <a href="task1.1.html" class="task-link"><span class="task-number">1.1</span> Зміна розміру шрифту</a>
+                <a href="task1.2.html" class="task-link"><span class="task-number">1.2</span> Таблиця з рядків</a>
+                <a href="task1.3.html" class="task-link"><span class="task-number">1.3</span> Створення заголовків</a>
+                <a href="task1.4.html" class="task-link"><span class="task-number">1.4</span> Універсальна функція</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Завдання 2. Дата та час</div>
+            <div class="task-list">
+                <a href="task2.1.html" class="task-link"><span class="task-number">2.1</span> Поточна дата та час</a>
+                <a href="task2.2.html" class="task-link"><span class="task-number">2.2</span> Відносна дата</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Завдання 3. Регулярні вирази</div>
+            <div class="task-list">
+                <a href="task3.1.html" class="task-link"><span class="task-number">3.1</span> Пошук дат РРРР-ММ-ДД</a>
+                <a href="task3.2.html" class="task-link"><span class="task-number">3.2</span> snake_case – camelCase</a>
+                <a href="task3.3.html" class="task-link"><span class="task-number">3.3</span> camelCase – snake_case</a>
+                <a href="task3.4.html" class="task-link"><span class="task-number">3.4</span> Пошук HEX-кольорів</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

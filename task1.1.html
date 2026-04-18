@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Завдання 1.1 - Зміна розміру шрифту</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 450px;
+        }
+        h2 { margin-bottom: 20px; color: #333; }
+        .input-group { margin-bottom: 15px; }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        input:focus { outline: none; border-color: #007bff; }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background: #0056b3; }
+        .display-text {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .back-link:hover { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>1.1. Зміна розміру шрифту</h2>
+        <div class="input-group">
+            <label>Текстовий рядок</label>
+            <input type="text" id="textInput" placeholder="Введіть текст" value="Текст із різним розміром шрифту">
+        </div>
+        <div class="input-group">
+            <label>Розмір шрифту (px, em, rem, %)</label>
+            <input type="text" id="fontSizeInput" placeholder="30px, 2em, 150%" value="30px">
+        </div>
+        <button id="applyBtn">Застосувати</button>
+        <div class="display-text" id="outputText">Тут з'явиться текст із заданим розміром</div>
+        <a href="index.html" class="back-link">На головну</a>
+    </div>
+    <script>
+        function setFontSize(text, fontSize) {
+            const outputDiv = document.getElementById('outputText');
+            outputDiv.textContent = text;
+            outputDiv.style.fontSize = fontSize;
+        }
+        const applyBtn = document.getElementById('applyBtn');
+        const textInput = document.getElementById('textInput');
+        const fontSizeInput = document.getElementById('fontSizeInput');
+        applyBtn.addEventListener('click', () => {
+            const text = textInput.value.trim();
+            const fontSize = fontSizeInput.value.trim();
+            if (text === '') {
+                setFontSize('Будь ласка, введіть текст', fontSize || '16px');
+            } else {
+                setFontSize(text, fontSize || '16px');
+            }
+        });
+    </script>
+</body>
+</html>

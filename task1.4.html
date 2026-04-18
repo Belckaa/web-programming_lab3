@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Завдання 1.4 - Універсальна функція</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 550px;
+        }
+        h2 { margin-bottom: 20px; color: #333; }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        input:focus { outline: none; border-color: #007bff; }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+        .radio-group input { width: auto; margin-bottom: 0; }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .result-item { margin: 8px 0; padding: 8px; border-left: 2px solid #007bff; padding-left: 12px; }
+        .result-value { color: #28a745; font-weight: bold; }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .back-link:hover { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>1.4. Універсальна функція</h2>
+        <label>Введіть параметри (числа та слова через пробіл)</label>
+        <input type="text" id="paramsInput" placeholder="Hello 10 20 world 5 8 test 3">
+        <label>Виберіть дію для чисел</label>
+        <div class="radio-group">
+            <label><input type="radio" name="action" value="max" checked> Максимальне число</label>
+            <label><input type="radio" name="action" value="sum"> Сума чисел</label>
+        </div>
+        <button id="processBtn">Обробити</button>
+        <div class="result" id="result">
+            <div class="result-item" id="numberResult"></div>
+            <div class="result-item" id="sentenceResult"></div>
+        </div>
+        <a href="index.html" class="back-link">На головну</a>
+    </div>
+    <script>
+        function processParameters(action, ...args) {
+            const numbers = [];
+            const words = [];
+            for (let arg of args) {
+                if (typeof arg === 'number' && !isNaN(arg)) {
+                    numbers.push(arg);
+                } else if (typeof arg === 'string' && arg.trim() !== '') {
+                    words.push(arg);
+                }
+            }
+            let numberResult = null;
+            if (numbers.length > 0) {
+                if (action === 'sum') {
+                    numberResult = numbers.reduce((acc, val) => acc + val, 0);
+                } else if (action === 'max') {
+                    numberResult = Math.max(...numbers);
+                }
+            }
+            const sentence = words.join(' ');
+            return { numberResult, sentence };
+        }
+        function parseInputString(inputStr) {
+            const parts = inputStr.trim().split(/\s+/);
+            const result = [];
+            for (let part of parts) {
+                const num = parseFloat(part);
+                if (!isNaN(num) && part !== '' && /^-?\d+(\.\d+)?$/.test(part)) {
+                    result.push(num);
+                } else {
+                    result.push(part);
+                }
+            }
+            return result;
+        }
+        const paramsInput = document.getElementById('paramsInput');
+        const processBtn = document.getElementById('processBtn');
+        const numberResultDiv = document.getElementById('numberResult');
+        const sentenceResultDiv = document.getElementById('sentenceResult');
+        function getSelectedAction() {
+            const radios = document.querySelectorAll('input[name="action"]');
+            for (let radio of radios) {
+                if (radio.checked) return radio.value;
+            }
+            return 'max';
+        }
+        function process() {
+            const inputStr = paramsInput.value.trim();
+            if (inputStr === '') {
+                numberResultDiv.innerHTML = 'Введіть параметри';
+                sentenceResultDiv.innerHTML = '';
+                return;
+            }
+            const args = parseInputString(inputStr);
+            const action = getSelectedAction();
+            const { numberResult, sentence } = processParameters(action, ...args);
+            const actionText = action === 'max' ? 'Максимальне число' : 'Сума чисел';
+            if (numberResult !== null) {
+                numberResultDiv.innerHTML = `${actionText}: <span class="result-value">${numberResult}</span>`;
+            } else {
+                numberResultDiv.innerHTML = `${actionText}: немає чисел`;
+            }
+            sentenceResultDiv.innerHTML = `Речення: <span class="result-value">${sentence || 'немає слів'}</span>`;
+        }
+        processBtn.addEventListener('click', process);
+        paramsInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') process(); });
+        paramsInput.value = 'Hello 10 20 world 5 8 test 3';
+        process();
+    </script>
+</body>
+</html>

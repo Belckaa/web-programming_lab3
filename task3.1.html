@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Завдання 3.1 - Пошук дат</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 550px;
+        }
+        h2 { margin-bottom: 20px; color: #333; }
+        .info-note {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: monospace;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        textarea:focus { outline: none; border-color: #007bff; }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .found-date {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 4px 12px;
+            margin: 4px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .back-link:hover { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>3.1. Пошук дат у форматі РРРР-ММ-ДД</h2>
+        <div class="info-note">Формат: РРРР-ММ-ДД (перевіряється валідність дати)</div>
+        <label>Введіть текст для пошуку</label>
+        <textarea id="textInput" rows="5" placeholder="Події: 2025-03-15, 2024-08-20, некоректна 2025-13-01"></textarea>
+        <button id="findBtn">Знайти дати</button>
+        <div class="result" id="result"><div id="datesList"></div></div>
+        <a href="index.html" class="back-link">На головну</a>
+    </div>
+    <script>
+        function isValidDate(year, month, day) {
+            const date = new Date(year, month - 1, day);
+            return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+        }
+        function findDates(text) {
+            const regex = /\b(\d{4})-(\d{2})-(\d{2})\b/g;
+            const matches = [];
+            let match;
+            while ((match = regex.exec(text)) !== null) {
+                const year = parseInt(match[1], 10);
+                const month = parseInt(match[2], 10);
+                const day = parseInt(match[3], 10);
+                if (isValidDate(year, month, day)) {
+                    matches.push(match[0]);
+                }
+            }
+            return matches;
+        }
+        const textInput = document.getElementById('textInput');
+        const findBtn = document.getElementById('findBtn');
+        const datesList = document.getElementById('datesList');
+        function find() {
+            const text = textInput.value;
+            if (text.trim() === '') {
+                datesList.innerHTML = '<p style="color: #888;">Введіть текст для пошуку</p>';
+                return;
+            }
+            const dates = findDates(text);
+            if (dates.length === 0) {
+                datesList.innerHTML = '<p style="color: #888;">Валідних дат у форматі РРРР-ММ-ДД не знайдено</p>';
+            } else {
+                let html = '<div style="margin-bottom: 8px;">Знайдені дати:</div>';
+                for (let date of dates) {
+                    html += `<span class="found-date">${date}</span>`;
+                }
+                datesList.innerHTML = html;
+            }
+        }
+        findBtn.addEventListener('click', find);
+    </script>
+</body>
+</html>

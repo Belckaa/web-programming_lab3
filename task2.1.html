@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Завдання 2.1 - Поточна дата та час</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 420px;
+            text-align: center;
+        }
+        h2 { margin-bottom: 20px; color: #333; }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover { background: #0056b3; }
+        .info-block {
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: left;
+        }
+        .info-line { margin: 12px 0; font-size: 14px; }
+        .label { color: #666; font-weight: bold; }
+        .value { color: #28a745; font-weight: bold; }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .back-link:hover { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>2.1. Поточна дата та час</h2>
+        <button onclick="showCurrentDateTime()">Отримати поточну дату та час</button>
+        <div class="info-block" id="dateTimeBlock">
+            <div class="info-line"><span class="label">Дата:</span> <span class="value" id="dateValue">---</span></div>
+            <div class="info-line"><span class="label">День тижня:</span> <span class="value" id="weekdayValue">---</span></div>
+            <div class="info-line"><span class="label">Час:</span> <span class="value" id="timeValue">---</span></div>
+        </div>
+        <a href="index.html" class="back-link">На головну</a>
+    </div>
+    <script>
+        function showCurrentDateTime() {
+            const now = new Date();
+            const months = ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'];
+            const weekdays = ['неділя', 'понеділок', 'вівторок', 'середа', 'четвер', 'п\'ятниця', 'субота'];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const weekday = weekdays[now.getDay()];
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('dateValue').innerHTML = `${day} ${month} ${year} року`;
+            document.getElementById('weekdayValue').innerHTML = weekday;
+            document.getElementById('timeValue').innerHTML = `${hours}:${minutes}`;
+        }
+    </script>
+</body>
+</html>

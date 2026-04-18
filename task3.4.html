@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Завдання 3.4 - Пошук HEX-кольорів</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 550px;
+        }
+        h2 { margin-bottom: 20px; color: #333; }
+        .info-note {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: monospace;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        textarea:focus { outline: none; border-color: #007bff; }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .found-color {
+            margin: 8px 0;
+            padding: 8px;
+            background: #e9ecef;
+            border-radius: 6px;
+        }
+        .color-preview {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            margin-left: 10px;
+            vertical-align: middle;
+            border: 1px solid #ddd;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .back-link:hover { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>3.4. Пошук HEX-кольорів у тексті</h2>
+        <div class="info-note">Формати: #RGB (3 символи) або #RRGGBB (6 символів) | Допустимі символи: A-F, a-f, 0-9</div>
+        <label>Введіть текст для пошуку</label>
+        <textarea id="textInput" rows="4" placeholder="Кольори: #F00, #0F0, #FFAABB, #123456, невалідний #XYZ"></textarea>
+        <button id="findBtn">Знайти кольори</button>
+        <div class="result" id="result"></div>
+        <a href="index.html" class="back-link">На головну</a>
+    </div>
+    <script>
+        function findHexColor(text) {
+            const regex = /#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})\b/g;
+            const matches = [];
+            let match;
+            while ((match = regex.exec(text)) !== null) {
+                matches.push(match[0]);
+            }
+            return matches.length > 0 ? matches : null;
+        }
+        function expandHex(hex) {
+            if (hex.length === 4) {
+                return '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+            }
+            return hex;
+        }
+        const textInput = document.getElementById('textInput');
+        const findBtn = document.getElementById('findBtn');
+        const resultDiv = document.getElementById('result');
+        function find() {
+            const text = textInput.value;
+            if (text.trim() === '') {
+                resultDiv.innerHTML = '<p style="color: #888;">Введіть текст для пошуку</p>';
+                return;
+            }
+            const colors = findHexColor(text);
+            if (!colors || colors.length === 0) {
+                resultDiv.innerHTML = '<p style="color: #888;">HEX-кольорів не знайдено (формат #RGB або #RRGGBB)</p>';
+            } else {
+                let html = '<div style="margin-bottom: 10px;">Знайдені кольори:</div>';
+                for (let color of colors) {
+                    const expandedColor = expandHex(color);
+                    html += `<div class="found-color">
+                                <span style="font-family: monospace; font-weight: bold;">${color}</span>
+                                <div class="color-preview" style="background-color: ${expandedColor};"></div>
+                            </div>`;
+                }
+                resultDiv.innerHTML = html;
+            }
+        }
+        findBtn.addEventListener('click', find);
+    </script>
+</body>
+</html>

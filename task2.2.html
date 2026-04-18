@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Завдання 2.2 - Відносна дата</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 480px;
+        }
+        h2 { margin-bottom: 20px; color: #333; }
+        .info-note {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        input:focus { outline: none; border-color: #007bff; }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background: #0056b3; }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .result-value { color: #28a745; }
+        .error {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .back-link:hover { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>2.2. Відносна дата</h2>
+        <div class="info-note">
+            Формати вводу: дд.мм.рррр | дд/мм/рррр | дд-мм-рррр<br>
+            Результат: Сьогодні | Вчора | 2-6 днів тому | Тиждень тому | Рік тому | РРРР.ММ.ДД
+        </div>
+        <label>Введіть дату</label>
+        <input type="text" id="dateInput" placeholder="Наприклад: 15.03.2026">
+        <button id="convertBtn">Перетворити</button>
+        <div class="result" id="result">---</div>
+        <div class="error" id="errorMsg"></div>
+        <a href="index.html" class="back-link">На головну</a>
+    </div>
+    <script>
+        function parseDate(dateStr) {
+            let separator = null;
+            if (dateStr.includes('.')) separator = '.';
+            else if (dateStr.includes('/')) separator = '/';
+            else if (dateStr.includes('-')) separator = '-';
+            else return null;
+            const parts = dateStr.split(separator);
+            if (parts.length !== 3) return null;
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parseInt(parts[2], 10);
+            if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+            const date = new Date(year, month, day);
+            if (date.getDate() !== day || date.getMonth() !== month || date.getFullYear() !== year) return null;
+            return date;
+        }
+        function getRelativeDateString(date) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const inputDate = new Date(date);
+            inputDate.setHours(0, 0, 0, 0);
+            const diffTime = today - inputDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            if (diffDays === 0) return 'Сьогодні';
+            if (diffDays === 1) return 'Вчора';
+            if (diffDays >= 2 && diffDays <= 6) return `${diffDays} дні тому`;
+            if (diffDays === 7) return 'Тиждень тому';
+            if (diffDays === 365 || diffDays === 366) {
+                const todayYear = today.getFullYear();
+                const inputYear = inputDate.getFullYear();
+                if (todayYear - inputYear === 1) return 'Рік тому';
+            }
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}.${month}.${day}`;
+        }
+        const dateInput = document.getElementById('dateInput');
+        const convertBtn = document.getElementById('convertBtn');
+        const resultDiv = document.getElementById('result');
+        const errorMsg = document.getElementById('errorMsg');
+        function convert() {
+            const inputStr = dateInput.value.trim();
+            errorMsg.style.display = 'none';
+            if (inputStr === '') {
+                errorMsg.textContent = 'Введіть дату';
+                errorMsg.style.display = 'block';
+                resultDiv.innerHTML = '---';
+                return;
+            }
+            const parsedDate = parseDate(inputStr);
+            if (!parsedDate) {
+                errorMsg.textContent = 'Невірний формат дати. Використовуйте дд.мм.рррр, дд/мм/рррр або дд-мм-рррр';
+                errorMsg.style.display = 'block';
+                resultDiv.innerHTML = '---';
+                return;
+            }
+            const result = getRelativeDateString(parsedDate);
+            resultDiv.innerHTML = `<span class="result-value">${result}</span>`;
+        }
+        convertBtn.addEventListener('click', convert);
+        dateInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') convert(); });
+        const today = new Date();
+        const day = today.getDate().toString().padStart(2, '0');
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const year = today.getFullYear();
+        dateInput.value = `${day}.${month}.${year}`;
+    </script>
+</body>
+</html>
